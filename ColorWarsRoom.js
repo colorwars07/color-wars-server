@@ -28,21 +28,20 @@ exports.ColorWarsRoom = class extends colyseus.Room {
                 }
             } else {
                 // Si el movimiento es ilegal (hackers), lo ignoramos
-                client.send("error", "Movimiento no permitido");
+                client.send("error", "Movimiento no permitido o no es tu turno");
             }
         });
     }
 
-    // 3. Cuando un jugador entra a la arena
+    // 3. Cuando un jugador entra a la arena (CIRUGÍA: Toma el color del celular)
     onJoin(client, options) {
-        // El primero que entra es Rosado, el segundo es Azul
-        if (this.clients.length === 1) {
-            client.userData = { color: "pink" };
-        } else {
-            client.userData = { color: "blue" };
+        // El servidor obedece el color exacto que le manda el celular
+        client.userData = { color: options.color };
+        console.log("Jugador unido como:", client.userData.color);
+        
+        if (this.clients.length >= 2) {
             this.lock(); // Cierra la puerta, nadie más entra
         }
-        console.log("Jugador unido como:", client.userData.color);
     }
 
     // 4. Si alguien huye o se le cae el internet
