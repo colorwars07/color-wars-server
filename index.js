@@ -20,8 +20,8 @@ const gameServer = new Server({
     transport: new WebSocketTransport({ server: server })
 });
 
-// Registramos la sala en el motor
-gameServer.define("arena", ColorWarsRoom);
+// Registramos la sala en el motor (CIRUGÍA: filtro por matchId)
+gameServer.define("arena", ColorWarsRoom).filterBy(['matchId']);
 
 gameServer.listen(port).then(() => {
     console.log(`🚀 Servidor de Color Wars corriendo en el puerto ${port}`);
